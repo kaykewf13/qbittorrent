@@ -96,7 +96,9 @@ SearchHandler::SearchHandler(const QString &pattern, const QString &category, co
     m_searchProcess->setProcessEnvironment(m_manager->proxyEnvironment());
     m_searchProcess->setProgram(Utils::ForeignApps::pythonInfo().executablePath.data());
 #ifdef Q_OS_UNIX
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 6, 0))
     m_searchProcess->setUnixProcessParameters(QProcess::UnixProcessFlag::CloseFileDescriptors);
+#endif
 #endif
 
     const QStringList params

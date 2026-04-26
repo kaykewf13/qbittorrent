@@ -45,7 +45,7 @@ AsyncFileStorage::AsyncFileStorage(const Path &storageFolderPath, QObject *paren
     {
         const QString errorMessage = tr("Could not create directory '%1'.").arg(m_storageDir.toString());
         LogMsg(errorMessage, Log::CRITICAL);
-        qFatal() << errorMessage;
+        qFatal("%s", qPrintable(errorMessage));
     }
 }
 

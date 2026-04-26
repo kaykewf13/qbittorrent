@@ -42,7 +42,8 @@ WebSession *WebSession::create(const WebSessionType type, const QString &sid)
         return new APIKeyBasedWebSession(sid);
     }
 
-    Q_UNREACHABLE_RETURN(nullptr);
+    Q_UNREACHABLE();
+    return nullptr;
 }
 
 WebSession::WebSession(const QString &sid)
@@ -88,7 +89,7 @@ bool CookieBasedWebSession::hasExpired(const std::chrono::milliseconds duration)
     if (duration <= 0ms)
         return false;
 
-    return timestamp().durationElapsed() > duration;
+    return std::chrono::milliseconds(timestamp().elapsed()) > duration;
 }
 
 bool CookieBasedWebSession::shouldRefreshCookie() const
