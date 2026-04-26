@@ -1664,7 +1664,7 @@ void SessionImpl::endStartup(ResumeSessionContext *context)
         auto wakeupCheckTimer = new QTimer(this);
         connect(wakeupCheckTimer, &QTimer::timeout, this, [this]
         {
-            const bool hasSystemSlept = m_wakeupCheckTimestamp.durationElapsed() > 100s;
+            const bool hasSystemSlept = (m_wakeupCheckTimestamp.elapsed() > std::chrono::milliseconds(100s).count());
             if (hasSystemSlept)
             {
                 LogMsg(tr("System wake-up event detected. Re-announcing to all the trackers..."));
@@ -2949,7 +2949,7 @@ bool SessionImpl::addTorrent_impl(const TorrentDescriptor &source, const AddTorr
     const auto resolveFileNames = [&, this]
     {
         if (!needFindIncompleteFiles)
-            return QtFuture::makeReadyValueFuture(FileSearchResult {.savePath = actualSavePath, .fileNames = filePaths});
+            return QtFuture::makeReadyFuture(FileSearchResult {.savePath = actualSavePath, .fileNames = filePaths});
 
         const Path actualDownloadPath = loadTorrentParams.useAutoTMM
                 ? categoryDownloadPath(loadTorrentParams.category) : loadTorrentParams.downloadPath;

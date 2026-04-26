@@ -548,7 +548,9 @@ void SearchPluginManager::update()
     QProcess nova;
     nova.setProcessEnvironment(proxyEnvironment());
 #ifdef Q_OS_UNIX
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 6, 0))
     nova.setUnixProcessParameters(QProcess::UnixProcessFlag::CloseFileDescriptors);
+#endif
 #endif
 
     const QStringList params

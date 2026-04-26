@@ -519,7 +519,7 @@ namespace
             return fallbackDate;
 
         const QTime qTime(hour, minute, second);
-        QDateTime result(qDate, qTime, QTimeZone::UTC);
+        QDateTime result(qDate, qTime, QTimeZone::utc());
         if (offset)
             result = result.addSecs(-offset);
         if (!result.isValid())

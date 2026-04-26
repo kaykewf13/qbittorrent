@@ -2953,13 +2953,13 @@ void TorrentImpl::prioritizeFiles(const QList<DownloadPriority> &priorities)
 template <typename Func>
 QFuture<std::invoke_result_t<Func>> TorrentImpl::invokeAsync(Func &&func) const
 {
-    QPromise<std::invoke_result_t<Func>> promise;
-    const auto future = promise.future();
-    promise.start();
-    m_session->invokeAsync([func = std::forward<Func>(func), promise = std::move(promise)]() mutable
+    auto promise = std::make_shared<QPromise<std::invoke_result_t<Func>>>();
+    const auto future = promise->future();
+    promise->start();
+    m_session->invokeAsync([func = std::forward<Func>(func), promise]() mutable
     {
-        promise.addResult(func());
-        promise.finish();
+        promise->addResult(func());
+        promise->finish();
     });
 
     return future;

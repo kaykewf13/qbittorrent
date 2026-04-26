@@ -670,8 +670,10 @@ void Application::runExternalProgram(const QString &programTemplate, const BitTo
         {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
             arg.slice(1, (arg.size() - 2));
-#else
+#elif QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
             arg.removeLast().removeFirst();
+#else
+            arg = arg.mid(1, arg.size() - 2);
 #endif
         }
 
@@ -682,7 +684,9 @@ void Application::runExternalProgram(const QString &programTemplate, const BitTo
     QProcess proc;
     proc.setProgram(command);
     proc.setArguments(args);
+#if defined(Q_OS_UNIX) && (QT_VERSION >= QT_VERSION_CHECK(6, 6, 0))
     proc.setUnixProcessParameters(QProcess::UnixProcessFlag::CloseFileDescriptors);
+#endif
 
     if (proc.startDetached())
     {
